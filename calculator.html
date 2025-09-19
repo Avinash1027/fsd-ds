@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table {
+            width: 350px;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            font-family: Arial, sans-serif;
+        }
+        th, td {
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+            color: #333;
+        }
+        tbody tr {
+            background-color: #fff;
+        }
+        tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculator</h1>
+    <input type="number" placeholder="Value 1">
+    <input type="number" placeholder="Value 2">
+    <br>
+    <br>
+    <button>Add</button>
+    <button>Subtract</button>
+    <button>Multiply</button>
+    <button>Divide</button>
+    <button id="resetBtn">Reset</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Value 1</th>
+                <th>Value 2</th>
+                <th>Result</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+<script>
+document.getElementById('resetBtn').addEventListener('click', () => {
+    value1Input.value = '';
+    value2Input.value = '';
+    tbody.innerHTML = '';
+});
+const value1Input = document.querySelector('input[placeholder="Value 1"]');
+const value2Input = document.querySelector('input[placeholder="Value 2"]');
+const buttons = document.querySelectorAll('button');
+const tbody = document.querySelector('tbody');
+
+function calculate(op) {
+    const val1 = parseFloat(value1Input.value);
+    const val2 = parseFloat(value2Input.value);
+    if (isNaN(val1) || isNaN(val2)) return;
+
+    let result;
+    switch(op) {
+        case 'Add': result = val1 + val2; break;
+        case 'Subtract': result = val1 - val2; break;
+        case 'Multiply': result = val1 * val2; break;
+        case 'Divide': result = val2 !== 0 ? val1 / val2 : 'Error'; break;
+    }
+
+    const row = document.createElement('tr');
+    row.innerHTML = `<td>${val1}</td><td>${val2}</td><td>${result}</td>`;
+    tbody.appendChild(row);
+}
+
+buttons.forEach(btn => {
+    btn.addEventListener('click', () => calculate(btn.textContent));
+});
+</script>
+</body>
+</html>
