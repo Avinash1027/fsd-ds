@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Student Marks Manager</h2>
+    <form id="studentForm">
+      <div class="input-group">
+        <label for="studentName">Student Name : </label>
+        <input type="text" id="studentName" name="studentName" placeholder="Enter student name">
+      </div><br>
+      <div class="input-group">
+        <label for="studentMarks">Marks:</label>
+        <input type="number" id="studentMarks" name="studentMarks" placeholder="Enter marks">
+      </div><br>
+      <button type="button" id="addBtn"> Add Student</button><br><br>
+    </form>
+    <div class="button-group">
+      <button type="button" id="showAllBtn"> Show All</button>
+      <button type="button" id="showPassBtn"> Show Passed</button><br>
+      <button type="button" id="avgBtn"> Average Marks</button>
+      <button type="button" id="topperBtn"> Find Topper</button>
+    </div><br>
+    <div class="output" id="output">
+      <strong>Results will be shown here...</strong>
+    </div>
+  </div>
+  <script>
+    const studentForm = document.getElementById('studentForm');
+    const studentNameInput = document.getElementById('studentName');
+    const studentMarksInput = document.getElementById('studentMarks');
+    const addBtn = document.getElementById('addBtn');
+    const showAllBtn = document.getElementById('showAllBtn');
+    const showPassBtn = document.getElementById('showPassBtn');
+    const avgBtn = document.getElementById('avgBtn');
+    const topperBtn = document.getElementById('topperBtn');
+    const outputDiv = document.getElementById('output');
+
+    let students = [];
+
+    addBtn.addEventListener('click', () => {
+      const name = studentNameInput.value.trim();
+      const marks = parseFloat(studentMarksInput.value);
+
+      if (name === '' || isNaN(marks) || marks < 0 || marks > 100) {
+        alert('Please enter a valid name and marks between 0 and 100.');
+        return;
+      }
+
+      students.push({ name, marks });
+      studentNameInput.value = '';
+      studentMarksInput.value = '';
+      alert(`Student ${name} with marks ${marks} added.`);
+    });
+
+    showAllBtn.addEventListener('click', () => {
+      if (students.length === 0) {
+        outputDiv.innerHTML = '<strong>No students available.</strong>';
+        return;
+      }
+      let result = '<h3>All Students:</h3><ul>';
+      students.map(student => {
+        result += `<li>${student.name}: ${student.marks}</li>`;
+      });
+      result += '</ul>';
+      outputDiv.innerHTML = result;
+    });
+
+    showPassBtn.addEventListener('click', () => {
+      const passedStudents = students.filter(student => student.marks >= 40);
+      if (passedStudents.length === 0) {
+        outputDiv.innerHTML = '<strong>No students have passed.</strong>';
+        return;
+      }
+      let result = '<h3>Passed Students:</h3><ul>';
+      passedStudents.forEach(student => {
+        result += `<li>${student.name}: ${student.marks}</li>`;
+      });
+      result += '</ul>';
+      outputDiv.innerHTML = result;
+    });
+
+    avgBtn.addEventListener('click', () => {
+      if (students.length === 0) {
+        outputDiv.innerHTML = '<strong>No students available to calculate average.</strong>';
+        return;
+      }
+        const totalMarks = students.reduce((sum, student) => sum + student.marks, 0);
+        const average = (totalMarks / students.length).toFixed(2);
+        outputDiv.innerHTML = `<h3>Average Marks: ${average}</h3>`;
+    });
+    topperBtn.addEventListener('click', () => {
+      if (students.length === 0) {
+        outputDiv.innerHTML = '<strong>No students available to find topper.</strong>';
+        return;
+      }
+    function findTopper(students) {
+      let topper = students[0];
+      for (let i = 1; i < students.length; i++) {
+        if (students[i].marks > topper.marks) {
+        topper = students[i];
+        }
+      }
+      return topper;
+    }
+    const topper = findTopper(students);
+      outputDiv.innerHTML = `<h3>Topper: ${topper.name} with marks ${topper.marks}</h3>`;
+    });
+  </script>
+</body>
+</html>
